@@ -11,8 +11,8 @@ class invKine:
 
     def __init__(self):
         self.thetas = np.zeros(6)
-        #self.l = [210,75,210]
-        self.l = [335, 88, 210]
+        self.l = [210,75,210]
+        #self.l = [335, 88, 210]
         rospy.init_node('invKineTest')
         self.z_offset = 280
         self.pub = []
@@ -64,9 +64,9 @@ class invKine:
             print('x = ' + str(x) + ' y = ' + str(y) + ' z = ' + str(z))
             print('------- JOINTS --------')
             print()
-            print('Joint angle 1 = ' + str(self.thetas[0]))
-            print('Joint angle 2 = ' + str(self.thetas[1]))
-            print('Joint angle 3 = ' + str(self.thetas[2]))
+            print('Joint angle 1 = ' + str(self.thetas[0]*180/np.pi))
+            print('Joint angle 2 = ' + str(self.thetas[1]*180/np.pi))
+            print('Joint angle 3 = ' + str(self.thetas[2]*180/np.pi))
         if(display_misc):
             print('-------- MISC ---------')
             print(' ')
@@ -85,7 +85,7 @@ class invKine:
             print(' ')
 
     def publish(self):
-        for i in range(5):
+        for i in range(6):
             theta = Float64()
             theta.data = self.thetas[i]
             self.pub[i].publish(theta)
@@ -124,7 +124,7 @@ class invKine:
         y = [0,125,-125,0]
         z = [280,420,240,565]
         z = [a - self.z_offset for a in z]
-        for i in range(3):
+        for i in range(4):
             self.calculate_joints(x[i],y[i],z[i])
             self.publish()
             rospy.sleep(2)
@@ -134,7 +134,7 @@ class invKine:
         y = [200, 200, -200, -200,0]
         z = [280, 565, 565, 280,565]
         z = [a - self.z_offset for a in z]
-        for i in range(4):
+        for i in range(5):
             self.calculate_joints(x[i], y[i], z[i])
             self.publish()
             rospy.sleep(2)
