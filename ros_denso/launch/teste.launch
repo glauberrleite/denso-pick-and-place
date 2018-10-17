@@ -1,0 +1,5 @@
+<launch>
+    <node name="invKine" pkg="ros_denso" type="invKine.py"/>
+    <node name="bridge" pkg="ros_denso" type="bridge.py"/>
+    <node name="planner" pkg="ros_denso" type="planer.py"/>
+</launch> 

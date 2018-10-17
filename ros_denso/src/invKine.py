@@ -12,12 +12,12 @@ class invKine:
         self.l = [210,75,210]
         self.z_offset = 280
         rospy.init_node('invKine')
-        self.pub = rospy.Publisher('joints', JointState, queue_size=10)
+        self.pub = rospy.Publisher('/joints', JointState, queue_size=10)
         rospy.Subscriber('/denso_trajectory', Transform, self.command_recieve)
 
 
     def command_recieve(self,transform_data):
-
+        rospy.loginfo('Colombia')
         translation = transform_data.translation
         rotation = transform_data.rotation
         x = translation.x
@@ -58,7 +58,7 @@ class invKine:
         self.thetas[2] = alpha - (np.pi / 2)
         self.thetas[3] = np.arctan2((2*c*d - 2*a*b),(2*b*d + 2*a*c))
         self.thetas[4] = np.arctan2((2*c*d - 2*a*b),((a**2 - b**2 - c**2 - d**2)*np.sin(self.thetas[3])))
-        self.thetas[5] = np.arctan2( ((1/(np.tan( np.sin(self.thetas[4])) ))*np.sin(self.thetas[3])),(((2*a*c + 2*a*d)/(2*c*d + 2*a*c)) - (np.cos(self.thetas[3])/np.sin(self.thetas[4]))) )
+        #self.thetas[5] = np.arctan2(((1/(np.tan(np.sin(self.thetas[4]))))*np.sin(self.thetas[3])),(((2*a*c + 2*a*d)/(2*c*d + 2*a*c)) - (np.cos(self.thetas[3])/np.sin(self.thetas[4]))))
         joint_state = JointState()
         joint_state.name.append('Denso')
         joint_state.position = [0.0,0.0,0.0,0.0,0.0,0.0]
@@ -72,3 +72,4 @@ class invKine:
 if __name__ == '__main__':
     invkine = invKine()
     rospy.spin()
+
