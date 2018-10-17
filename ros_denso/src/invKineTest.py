@@ -4,7 +4,8 @@ import numpy as np
 import sys
 import signal
 from std_msgs.msg import Float64
-
+from trajectory_msgs.msg import JointTrajectory
+from trajectory_msgs.msg import JointTrajectoryPoint
 
 
 class invKine:
@@ -15,13 +16,7 @@ class invKine:
         #self.l = [335, 88, 210]
         rospy.init_node('invKineTest')
         self.z_offset = 280
-        self.pub = []
-        self.pub.append(rospy.Publisher('/vp6242/joint1_position_controller/command', Float64, queue_size=10))
-        self.pub.append(rospy.Publisher('/vp6242/joint2_position_controller/command', Float64, queue_size=10))
-        self.pub.append(rospy.Publisher('/vp6242/joint3_position_controller/command', Float64, queue_size=10))
-        self.pub.append(rospy.Publisher('/vp6242/joint4_position_controller/command', Float64, queue_size=10))
-        self.pub.append(rospy.Publisher('/vp6242/joint5_position_controller/command', Float64, queue_size=10))
-        self.pub.append(rospy.Publisher('/vp6242/joint6_position_controller/command', Float64, queue_size=10))
+        self.pub = rospy.Publisher('/vp6242/trajectory_controller/command', JointTrajectory, queue_size=10)
         self.publish()
 
     def calculate_joints(self,x,y,z, display_angles = True, display_misc = True):
@@ -54,10 +49,11 @@ class invKine:
         self.thetas[0] = np.arctan2(y, x)
         self.thetas[1] = ((np.pi / 2) - theta_L1) * 0.8582
         self.thetas[2] = alpha - (np.pi / 2)
-        self.thetas[3] = 0
-        self.thetas[4] = 0
-        self.thetas[5] = 0
-
+        '''
+        self.thetas[3] = np.arctan2((2 * c * d - 2 * a * b), (2 * b * d + 2 * a * c))
+        self.thetas[4] = np.arctan2((2 * c * d - 2 * a * b),((a ** 2 - b ** 2 - c ** 2 - d ** 2) * np.sin(self.thetas[3])))
+        self.thetas[5] = np.arctan2(((1 / (np.tan(np.sin(self.thetas[4])))) * np.sin(self.thetas[3])), (((2 * a * c + 2 * a * d) / (2 * c * d + 2 * a * c)) - (np.cos(self.thetas[3]) / np.sin(self.thetas[4]))))
+        '''
         if(display_angles):
             print('------- GOAL -------')
             print(' ')
@@ -85,10 +81,11 @@ class invKine:
             print(' ')
 
     def publish(self):
-        for i in range(6):
-            theta = Float64()
-            theta.data = self.thetas[i]
-            self.pub[i].publish(theta)
+            theta = JointTrajectory()
+            thetaPoints = JointTrajectoryPoint()
+            thetaPoints.positions = self.thetas
+            theta.points = thetaPoints
+            self.pub.publish(theta)
 
     def wait_msg(self):
         while not rospy.is_shutdown():
