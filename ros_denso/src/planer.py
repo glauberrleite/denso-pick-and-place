@@ -17,6 +17,7 @@ class planner:
 
     def recieve_tf(self, msg):
         if(not self.is_planning):
+            rospy.logwarn('Entrei Carai')
             self.is_planning = True
 
             self.goal = msg.transforms[0].transform
@@ -27,10 +28,11 @@ class planner:
     def plan(self):
            if(self.is_planning):
                 msg = Transform()
-                msg.rotation.x = 0.0
+                '''msg.rotation.x = 0.0
                 msg.rotation.y = np.sqrt(2)/2
                 msg.rotation.z = 0.0
-                msg.rotation.w = np.sqrt(2)/2
+                msg.rotation.w = np.sqrt(2)/2'''
+                msg.rotation = self.goal.rotation
                 msg.translation.x = self.goal.translation.x*1000
                 msg.translation.y = self.goal.translation.y*1000
                 msg.translation.z = 80+(self.goal.translation.z*1000)
@@ -40,30 +42,21 @@ class planner:
                 msg.translation.x = self.goal.translation.x * 1000
                 msg.translation.y = self.goal.translation.y * 1000
                 msg.translation.z = 80 + (self.goal.translation.z * 1000)
-                msg.rotation.x = 0.0
-                msg.rotation.y = 1.0
-                msg.rotation.z = 0.0
-                msg.rotation.w = 0.0
+                msg.rotation = self.goal.rotation
                 self.trajectory.append(msg)
-                dz = (100-(self.goal.translation.z*1000))/10
+                dz = (100-(self.goal.translation.z*1000))/4
                 lastz = msg.translation.z
-                for i in range(1,11):
+                for i in range(1,5):
                     msg = Transform()
-                    msg.rotation.x = 0.0
-                    msg.rotation.y = 1.0
-                    msg.rotation.z = 0.0
-                    msg.rotation.w = 0.0
+                    msg.rotation = self.goal.rotation
                     msg.translation.x = self.goal.translation.x * 1000
                     msg.translation.y = self.goal.translation.y * 1000
                     msg.translation.z = lastz-dz
                     self.trajectory.append(msg)
                     lastz = msg.translation.z
                 #Todo Gripper
-                for i in range(1,11):
-                    msg.rotation.x = 0.0
-                    msg.rotation.y = 1.0
-                    msg.rotation.z = 0.0
-                    msg.rotation.w = 0.0
+                for i in range(1,5):
+                    msg.rotation = self.goal.rotation
                     msg.translation.x = self.goal.translation.x * 1000
                     msg.translation.y = self.goal.translation.y * 1000
                     msg.translation.z = lastz + dz
@@ -73,7 +66,7 @@ class planner:
     def move(self):
         while len(self.trajectory) > 0:
             mov = self.trajectory.pop(0)
-            rospy.sleep(1)
+            rospy.sleep(0.5)
             self.pub.publish(mov)
             rospy.loginfo(mov)
         self.is_planning = False

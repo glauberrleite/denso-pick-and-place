@@ -12,7 +12,7 @@ class invKine:
         self.l = [210,75,210]
         self.z_offset = 280
         rospy.init_node('invKine')
-        self.pub = rospy.Publisher('/joints', JointState, queue_size=10)
+        self.pub = rospy.Publisher('/joints_denso', JointState, queue_size=10)
         rospy.Subscriber('/denso_trajectory', Transform, self.command_recieve)
 
 
@@ -27,16 +27,18 @@ class invKine:
         b = rotation.x
         c = rotation.y
         d = rotation.z
-        w = np.sqrt(x ** 2 + y ** 2)
-        L = np.sqrt(w ** 2 + z ** 2)
-        Lf = np.sqrt(self.l[1] ** 2 + self.l[2] ** 2)
+        w = np.sqrt(x**2 + y**2)
+        L = np.sqrt(w**2 + z**2)
+        Lf = np.sqrt(self.l[1]**2 + self.l[2]**2)
 
-        c_phi = ((self.l[0] ** 2 + Lf ** 2) - L ** 2) / (2 * self.l[0] * Lf)
-        s_phi = np.sqrt(1 - c_phi ** 2)
+        c_phi = (self.l[0]**2 + Lf**2 - L**2) / (2 * self.l[0] * Lf)
+        rospy.loginfo(c_phi)
+        s_phi = np.sqrt(1 - c_phi**2)
         phi = np.arctan2(s_phi, c_phi)
 
         c_phi2 = (Lf ** 2 + L ** 2 - self.l[0] ** 2) / (2 * Lf * L)
-        s_phi2 = np.sqrt(1 - c_phi2 ** 2)
+        rospy.loginfo(c_phi2)
+        s_phi2 = np.sqrt(1 - c_phi2**2)
         phi2 = np.arctan2(s_phi2, c_phi2)
 
         phi1 = np.pi - phi - phi2
@@ -51,19 +53,23 @@ class invKine:
         kappa = np.arctan2(w_kappa, z_kappa)
         beta = np.arctan2(self.l[2], self.l[1])
 
+        kappa = (np.pi/2) - beta
         true_alpha = np.pi - beta - kappa
 
         self.thetas[0] = np.arctan2(y, x)
         self.thetas[1] = ((np.pi / 2) - theta_L1) * 0.8582
         self.thetas[2] = alpha - (np.pi / 2)
-        self.thetas[3] = np.arctan2((2*c*d - 2*a*b),(2*b*d + 2*a*c))
-        self.thetas[4] = np.arctan2((2*c*d - 2*a*b),((a**2 - b**2 - c**2 - d**2)*np.sin(self.thetas[3])))
-        #self.thetas[5] = np.arctan2(((1/(np.tan(np.sin(self.thetas[4]))))*np.sin(self.thetas[3])),(((2*a*c + 2*a*d)/(2*c*d + 2*a*c)) - (np.cos(self.thetas[3])/np.sin(self.thetas[4]))))
+        self.thetas[3] = 0
+
+        self.thetas[4] = np.pi -(kappa + phi2) - (np.pi/2 - theta_L)
+        self.thetas[5] = self.thetas[0] - (2*np.arccos(a))%(np.pi/2)
         joint_state = JointState()
-        joint_state.name.append('Denso')
+        joint_state.name = ['joint1','joint2','joint3','joint4','joint5','joint6']
         joint_state.position = [0.0,0.0,0.0,0.0,0.0,0.0]
         joint_state.velocity = [0.0,0.0,0.0,0.0,0.0,0.0]
+        joint_state.effort = [0.0,0.0,0.0,0.0,0.0,0.0]
         joint_state.position = self.thetas
+        rospy.loginfo(joint_state)
         self.pub.publish(joint_state)
 
 
