@@ -25,8 +25,9 @@ Download and install the control tools for our robot model in order to turn on t
 	catkin_make
 
 
-The following step comprises the installing of packages which allow us to publish joint states throug a ROS Node
-(Guide available on http://wiki.ros.org/robot_state_publisher and http://wiki.ros.org/urdf/Tutorials/Using%20urdf%20with%20robot_state_publisher)
+The following step comprises the installing of packages which allow us to publish joint states throug a ROS Node.
+(Available on http://wiki.ros.org/robot_state_publisher 
+and http://wiki.ros.org/urdf/Tutorials/Using%20urdf%20with%20robot_state_publisher)
 
 	cd catkin_ws/src
 	git clone https://github.com/ros/robot_state_publisher/tree/kinetic-devel/src
