@@ -36,4 +36,6 @@ and http://wiki.ros.org/urdf/Tutorials/Using%20urdf%20with%20robot_state_publish
 
 Finally, clone the folder /vp6242_kinematics_publisher from https://github.com/glauberrleite/denso-pick-and-place.git inside your catkin_ws/src. 
 Path back to the top level /catkin_ws 
-and build with catkin_make.
+and build with catkin_make. The node will be available on:
+
+	catkin_ws/devel/lib/vp6242_state_publisher
