@@ -229,7 +229,7 @@ vector< tuple<double, double, double, double, double, double, double> > straight
 			cout << "----- GOAL -----" << endl << endl;
 		}
 
-		joint_trajectory.push_back(inverse_kinematics(x,y,z,w,gripper_position,false));
+		joint_trajectory.push_back(inverse_kinematics(x,y,z,w,gripper_position,true));
 	}
 
 	if(planner_info) {
