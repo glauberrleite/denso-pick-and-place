@@ -65,7 +65,7 @@ bool goal_position_ready = false;
 /* If true, set an arbitrary goal. 
 /* If false, assign the data listened from topic /denso_cube_tf
 */
-bool simulation = false; 
+bool simulation = true; 
 
 //! Evaluate the kinematics and call the arm handler.
 tuple<double, double, double, double, double, double, double> inverse_kinematics(double x, double y, 
