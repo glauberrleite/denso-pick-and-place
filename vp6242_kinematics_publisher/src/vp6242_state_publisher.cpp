@@ -137,15 +137,6 @@ tuple<double, double, double, double, double, double, double> inverse_kinematics
 			joint5_arg = PI-(kappa+phi2)-(PI/2-theta_L);
 			joint6_arg = atan2(y,x) - fmod((2*acos(abs(w))) , PI);
 
-
-				cout << "Handling joint 1 by " << joint1_arg << " rad." << endl;
-				cout << "Handling joint 2 by " << joint2_arg << " rad." << endl;
-				cout << "Handling joint 3 by " << joint3_arg << " rad." << endl;
-				cout << "Handling joint 4 by " << joint4_arg << " rad." << endl;
-				cout << "Handling joint 5 by " << joint5_arg << " rad." << endl;
-				cout << "Handling joint 6 by " << joint6_arg << " rad." << endl;
-
-
 			joints_nan_flag = isnan(joint1_arg) || isnan(joint2_arg) || isnan(joint3_arg) || isnan(joint4_arg) || isnan(joint5_arg) || isnan(joint6_arg);
 
 			joints_inf_flag = isinf(joint1_arg) || isinf(joint2_arg) || isinf(joint3_arg)|| isinf(joint4_arg) || isinf(joint5_arg) || isinf(joint6_arg);
