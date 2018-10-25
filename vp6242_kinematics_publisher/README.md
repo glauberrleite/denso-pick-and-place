@@ -30,7 +30,7 @@ The following step comprises the installing of packages which allow us to publis
 and http://wiki.ros.org/urdf/Tutorials/Using%20urdf%20with%20robot_state_publisher)
 
 	cd catkin_ws/src
-	git clone https://github.com/ros/robot_state_publisher/tree/kinetic-devel/src
+	git clone https://github.com/ros/robot_state_publisher/tree/kinetic-devel/
 	cd ..
 	catkin_make
 
