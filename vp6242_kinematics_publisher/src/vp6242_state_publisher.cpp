@@ -63,7 +63,7 @@ bool goal_position_ready = false;
 
 //* Toggle the variable "simulation" true/false to define the source of data. 
 /* If true, set an arbitrary goal. 
-/* If false, assign the data listened from topic /denso_cube_tf
+/* If false, assign the goal with data listened from topic /denso_cube_tf
 */
 bool simulation = true; 
 
