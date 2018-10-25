@@ -61,7 +61,7 @@ vector < tuple<double, double, double, double> > goal_position_samples;
 bool start_position_ready = true;
 bool goal_position_ready = false;
 
-//* Toggle on main() to define the source of data. 
+//* Toggle the variable "simulation" true/false to define the source of data. 
 /* If true, set an arbitrary goal. 
 /* If false, assign the data listened from topic /denso_cube_tf
 */
